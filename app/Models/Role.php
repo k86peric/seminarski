@@ -11,7 +11,7 @@ class Role extends Model
 {
     use HasFactory, SoftDeletes;
 
-    //protected $hidden = ['deleted_at'];
+    protected $hidden = ['deleted_at'];
 
     public function users(): HasMany
     {

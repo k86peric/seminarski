@@ -14,8 +14,17 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::all();
-        return view('posts.index', compact('posts'));
+        $posts = null;
+        $userPosts = null;
+
+        if (auth()->user()->roles === 'Administrator') {
+            $posts = Post::all();
+            $userPosts = Post::all();
+        } else {
+            $userPosts = Post::where('user_id', auth()->user()->id)->get();
+        }
+
+        return view('posts.index', compact('posts', 'userPosts'));
     }
 
     /**
@@ -31,15 +40,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'title' => 'required',
             'content' => 'required',
         ]);
 
-        $post = Post::create($validatedData);
-        
-        return redirect()->route('posts.show', $post->id)
-        ->with('success', 'Post created successfully');
+        // Create a new post instance and associate it with the current logged-in user
+        $post = new Post([
+            'title' => $request->input('title'),
+            'content' => $request->input('content'),
+        ]);
+
+        // Save the post for the current user
+        Auth::user()->posts()->save($post);
+
+        return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
     /**
@@ -58,6 +73,7 @@ class PostController extends Controller
     public function edit(string $id)
     {
         $post = Post::findOrFail($id);
+        $this->authorize('update', $post);
 
         return view('posts.edit', compact('post'));
     }
