@@ -12,7 +12,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return Role::all();
+        $roles = Role::all();
+        return view('roles.index', compact('roles'));
     }
 
     /**
@@ -20,7 +21,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('roles.create');
     }
 
     /**
@@ -31,40 +32,42 @@ class RoleController extends Controller
         $role = new Role();
         $role->fill($request->all());
         $role->save();
-        return redirect()->route('role.index');
+        return redirect()->route('roles.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        $role = Role::withTrashed()->find($role);
-        $role->users;
-
-        if ($role->trashed()) {
-            $role->restore();
-        }
-
-        return [
-            'role' => $role,
-        ];
+        $role = Role::findOrFail($id);
+        return view('roles.show', compact('role'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
-        //
+        $role = Role::findOrFail($id);
+        return view('roles.edit', compact('role'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required|unique:roles,name,' . $id,
+        ]);
+
+        $role = Role::findOrFail($id);
+        $role->update([
+            'name' => $request->input('name'),
+        ]);
+
+        return redirect()->route('roles.show', $id)->with('success', 'Role updated successfully');
     }
 
     /**
@@ -74,6 +77,6 @@ class RoleController extends Controller
     {
         $role->delete();
 
-        return redirect()->route('role.index');
+        return redirect()->route('roles.index');
     }
 }
