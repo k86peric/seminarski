@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +38,4 @@ require __DIR__.'/auth.php';
 
 Route::resource('/posts', PostController::class);
 Route::resource('/users', UserController::class);
+Route::resource('/roles', RoleController::class);
