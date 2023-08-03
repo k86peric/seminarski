@@ -6,7 +6,7 @@
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    @if($posts)
+    @can('isAdmin')
         <!-- For Administrators: Show all posts -->
         @if($posts->isEmpty())
             <p>No posts found.</p>
@@ -18,7 +18,7 @@
                     </li>
                 @endforeach
             </ul>
-        @endif
+        @endcan
     @else
         <!-- For Regular Users: Show only their own posts -->
         @if($userPosts->isEmpty())

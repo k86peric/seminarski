@@ -14,15 +14,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = null;
-        $userPosts = null;
-
-        if (auth()->user()->roles === 'Administrator') {
-            $posts = Post::all();
-            $userPosts = Post::all();
-        } else {
-            $userPosts = Post::where('user_id', auth()->user()->id)->get();
-        }
+               
+        $posts = Post::all();             
+        $userPosts = Post::where('user_id', auth()->user()->id)->get();
+        
 
         return view('posts.index', compact('posts', 'userPosts'));
     }
