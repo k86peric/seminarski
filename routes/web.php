@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NavigationController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -39,3 +41,6 @@ require __DIR__.'/auth.php';
 Route::resource('/posts', PostController::class);
 Route::resource('/users', UserController::class);
 Route::resource('/roles', RoleController::class);
+Route::resource('pages', PageController::class)->middleware('auth');
+Route::resource('/navigation', NavigationController::class);
+Route::get('/pages/{slug}', [PageController::class, 'showPage'])->name('pages.show');

@@ -37,6 +37,18 @@
                         {{ __('Roles') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('pages.index')" :active="request()->routeIs('pages.index')">
+                        {{ __('Pages') }}
+                    </x-nav-link>
+                </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('navigation.index')" :active="request()->routeIs('navigation.index')">
+                        {{ __('Nav') }}
+                    </x-nav-link>
+                </div>
                 @endcan
             </div>
 
